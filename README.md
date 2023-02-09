@@ -30,9 +30,7 @@ Now I can easily install SteamOS and Windows without manually resizing / creatin
 
 ## Requirements
 1. SteamOS Recovery Image.
-2. USB flash drive for Steam Recovery Image. Recommended size is at least 8GB USB3.
-3. USB C hub / dock, keyboard and mouse. (Skip the USB C hub / dock if you are using a wireless keyboard and mouse).
-3. Spare MicroSD plugged into the MicroSD slot - this is where SteamOS will be installed. Recommended size is at least 32GB A1 / A2 microSD card.
+2. USB flash drive for Steam Recovery Image. Recommended size is at least 8GB.
 
 
 ## Instructions
