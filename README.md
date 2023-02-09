@@ -82,3 +82,6 @@ Now I can easily install SteamOS and Windows without manually resizing / creatin
 16. Windows installer will load and once it arrives on the screen to select the target destination - there will already be a free space that can be used for Windows! It also shows the 16GiB partition that I have allocated for SteamOS.
 
     ![image](https://user-images.githubusercontent.com/98122529/217674130-a7528fc7-497b-4993-a1b6-33f5546137ca.png)
+
+## Future Plans
+Integrate Clover or rEFInd as part of the dual boot wizard.
