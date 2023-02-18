@@ -14,6 +14,13 @@ The script has sanity checks and if it is not met, no changes will be made and i
 1. Do this at your own risk!
 2. This is for educational and research purposes only!
 
+## What's New (as of February 18 2023)
+1. added 768Gib and 1536Gib options for SteamOS /home partition
+2. added CUSTOM option - end user can put in his own preferred size for SteamOS /home partition
+
+## Old Changelog - February 10 2023
+1. Initial Release
+
 ## But Why?!?
 I created / modified the official Valve SteamOS recovery image script to solve this particular problem [(click here for details.)](https://help.steampowered.com/en/faqs/view/6121-eccd-d643-baa8)
 
