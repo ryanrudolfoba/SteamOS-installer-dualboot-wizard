@@ -9,14 +9,13 @@
 
 set -eu
 
-
-###### Start of custom parititoning for dual boot
 clear
 
 echo SteamOS Installer with Dual Boot Wizard
 echo https://github.com/ryanrudolfoba/SteamOS-installer-dualboot-wizard
 sleep 1
 
+###### Main menu. Ask user for the preferred SteamOS /home partition size
 InternalSSD=$(lsblk | grep nvme | head -n1 | tr -s " " | cut -d " " -f 4 | cut -d "." -f 1)
 
 if [ $InternalSSD -eq 1 ]
@@ -27,31 +26,45 @@ else
 	echo Internal SSD is $InternalSSD\GiB
 fi
 
-CustomPartition=$(zenity --width 1280 --height 400 --list --radiolist --multiple --title "SteamOS Installer with Dual Boot Wizard - https://github.com/ryanrudolfoba/SteamOS-installer-dualboot-wizard"\
+Choice=$(zenity --width 1280 --height 400 --list --radiolist --multiple --title "SteamOS Installer with Dual Boot Wizard - https://github.com/ryanrudolfoba/SteamOS-installer-dualboot-wizard"\
 	--column "Select One" \
 	--column "SteamOS /home Partition" \
 	--column="Comments"\
 	FALSE 16GiB "Allocate 16GiB for SteamOS. I use this for testing, BIOS updates etc etc..."\
-	FALSE 32GiB "Allocate 32GiB for SteamOS. This is a good balance for a 64GiB Steam Deck."\
-	FALSE 128GiB "Allocate 128GiB for SteamOS. This is a good balance for a 256GiB Steam Deck."\
-	FALSE 256GiB "Allocate 256GiB for SteamOS. This is a good balance for a 512GiB Steam Deck."\
-	FALSE 512GiB "Allocate 512GiB for SteamOS. This is a good balance for a custom 1TiB Steam Deck."\
-	FALSE 1024GiB "Allocate 1024GiB for SteamOS. This is a good balance for a custom 2TiB Steam Deck."\
-	TRUE 0GiB "Select this if you changed your mind and don't want to proceed anymore.")
+	FALSE 32GiB "Allocate 32GiB for SteamOS. 50% for STeamOS and 50% for Windows on a 64GiB Steam Deck."\
+	FALSE 128GiB "Allocate 128GiB for SteamOS. 50% for SteamOS and 50% for Windows on a 256GiB Steam Deck."\
+	FALSE 256GiB "Allocate 256GiB for SteamOS. 50% for SteamOS and 50% for Windows on a 512GiB Steam Deck."\
+	FALSE 512GiB "Allocate 512GiB for SteamOS. 50% for SteamOS and 50% for Windows on a custom 1TiB Steam Deck."\
+	FALSE 768GiB "Allocate 768GiB for SteamOS. 75% for SteamOS and 25% for Windows on a custom 1TiB Steam Deck."\
+	FALSE 1024GiB "Allocate 1024GiB for SteamOS. 50% for SteamOS and 50% for Windows on a custom 2TiB Steam Deck."\
+	FALSE 1536GiB "Allocate 1536GiB for SteamOS. 75% for SteamOS and 25% for Windows on a custom 2TiB Steam Deck."\
+	FALSE CUSTOM "Select this if you want to set your own SteamOS /home partition."\
+	TRUE EXIT "Select this if you changed your mind and don't want to proceed anymore.")
 
-
-CustomPartition=$(echo $CustomPartition | tr -d [:upper:] | tr -d [:lower:])
-echo $InternalSSD
-echo $CustomPartition
-
-if [ $CustomPartition -eq 0 ]
+if [ "$Choice" == "CUSTOM" ]
 then
+  echo $Choice
+  echo OK lets do custom partitioning!
+  CustomPartition=$(zenity --entry --title "Custom Partitioning" --text "How much space to allocate for SteamOS /home parition? (in GiB)")
+  PartitionSize=$(echo $CustomPartition | tr -d [:upper:] | tr -d [:lower:])
+  echo $InternalSSD
+  echo $PartitionSize
+
+elif [ "$Choice" == "EXIT" ]
+then
+  echo $Choice
   echo Make no changes. Exiting immediately.
   exit
 
-elif [ $CustomPartition -ge $InternalSSD ]
+else
+  PartitionSize=$(echo $Choice | tr -d [:upper:] | tr -d [:lower:])
+  echo $InternalSSD
+  echo $PartitionSize
+fi
+
+if [ $PartitionSize -ge $InternalSSD ]
 then
-	zenity --width 350 --height 200 --error --text "Whoopsie you cant do that!\n\nMake sure that the SteamOS partition you want to set is smaller than your internal SSD.\n\n$CustomPartition\GiB is greater than your $InternalSSD\GiB internal SSD.\n\n\nRun the script again and choose a smaller allocation size for SteamOS."
+	zenity --width 350 --height 200 --error --text "Whoopsie you cant do that!\n\nMake sure that the SteamOS partition you want to set is smaller than your internal SSD.\n\n$PartitionSize\GiB is greater than your $InternalSSD\GiB internal SSD.\n\n\nRun the script again and choose a smaller allocation size for SteamOS."
 	exit
 fi
 
@@ -73,7 +86,7 @@ readvar PARTITION_TABLE <<END_PARTITION_TABLE
   ${DISK}${DISK_SUFFIX}5: name="rootfs-B", size=  5120MiB, type=4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709
   ${DISK}${DISK_SUFFIX}6: name="var-A",    size=   256MiB, type=4D21B016-B534-45C2-A9FB-5C16E091FD2D
   ${DISK}${DISK_SUFFIX}7: name="var-B",    size=   256MiB, type=4D21B016-B534-45C2-A9FB-5C16E091FD2D
-  ${DISK}${DISK_SUFFIX}8: name="home",     size= ${CustomPartition}GiB  type=933AC7E1-2EB4-4F13-B844-0E14E2AEF915
+  ${DISK}${DISK_SUFFIX}8: name="home",     size= ${PartitionSize}GiB  type=933AC7E1-2EB4-4F13-B844-0E14E2AEF915
   ${DISK}${DISK_SUFFIX}9: name="Windows",                   type=EBD0A0A2-B9E5-4433-87C0-68B6B72699C7
 END_PARTITION_TABLE
 
@@ -365,7 +378,7 @@ sanitize_all()
 writePartitionTable=1
 writeOS=1
 writeHome=1
-prompt_step "Reimage Steam Deck" "This action will reimage the Steam Deck and allocate $CustomPartition\GiB for SteamOS /home partition.\n\nThis will permanently destroy all data on your Steam Deck and reinstall SteamOS.\n\nThis cannot be undone.\n\nChoose Proceed only if you wish to clear and reimage this device."
+prompt_step "Reimage Steam Deck" "This action will reimage the Steam Deck and allocate $PartitionSize\GiB for SteamOS /home partition.\n\nThis will permanently destroy all data on your Steam Deck and reinstall SteamOS.\n\nThis cannot be undone.\n\nChoose Proceed only if you wish to clear and reimage this device."
 repair_steps
 prompt_reboot "Reimaging complete."
 
