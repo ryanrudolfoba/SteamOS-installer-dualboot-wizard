@@ -16,7 +16,7 @@ The script has sanity checks and if it is not met, no changes will be made and i
 
 ## What's New (as of February 18 2023)
 1. added 768Gib and 1536Gib options for SteamOS /home partition
-2. added CUSTOM option - end user can put in his own preferred size for SteamOS /home partition
+2. added CUSTOM option - end user can enter his own preferred size for SteamOS /home partition
 
 ## Old Changelog - February 10 2023
 1. Initial Release
@@ -30,7 +30,11 @@ Now I can easily install SteamOS and Windows without manually resizing / creatin
 
 ## Screenshots
 **Main Screen - Select how much space to allocate to SteamOS /home partition**
-![image](https://user-images.githubusercontent.com/98122529/217665775-eca07740-b49b-461e-8d44-f83b9bdb6e09.png)
+![image](https://user-images.githubusercontent.com/98122529/219874357-fddf841d-51c2-48f6-95a5-4ddcd1c53e32.png)
+
+**CUSTOM - end user can enter his own preferred size for SteamOS /home partition**
+![image](https://user-images.githubusercontent.com/98122529/219874434-b80ac205-fa94-4e09-84c6-2162edf4d976.png)
+
 
 **Ready to proceed with the reimage - 16GiB will be allocated for SteamOS /home partition**
 ![image](https://user-images.githubusercontent.com/98122529/217666125-637985c4-c3e7-46ed-b2e0-3212197a97e6.png)
@@ -65,7 +69,7 @@ Now I can easily install SteamOS and Windows without manually resizing / creatin
     
 9. The main screen will appear. Choose how much space you want to allocate to SteamOS. If you changed your mind and just want to exit the script, just press EXIT / CANCEL while it is highlighted on 0.
 
-![image](https://user-images.githubusercontent.com/98122529/217665492-b6eafa67-eb9f-4d0b-a0a3-f56888b96aba.png)
+![image](https://user-images.githubusercontent.com/98122529/219874391-83f3779d-616e-4d77-b071-10d8e32cf276.png)
 
 
 10. On this example I want to allocate 16GiB to SteamOS /home partition. Click the selection for 16GiB and press OK.
