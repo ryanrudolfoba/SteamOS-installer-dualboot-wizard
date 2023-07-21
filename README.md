@@ -9,6 +9,17 @@ The script will ask how much disk space to allocate for the SteamOS /home partit
 
 The script has sanity checks and if it is not met, no changes will be made and it will exit immediately. If the sanity checks are met then it proceeds to reimage the NVME drive and allocate the /home partition based from the selection of the end user, and finally assigns the remaining free space for Windows.
 
+> **NOTE**\
+> If you are going to use this script for a video tutorial, PLEASE reference on your video where you got the script! This will make the support process easier!
+> And don't forget to give a shoutout to [@10MinuteSteamDeckGamer](https://www.youtube.com/@10MinuteSteamDeckGamer/) / ryanrudolf from the Philippines!
+>
+
+<b> If you like my work please show support by subscribing to my [YouTube channel @10MinuteSteamDeckGamer.](https://www.youtube.com/@10MinuteSteamDeckGamer/) </b> <br>
+<b> I'm just passionate about Linux, Windows, how stuff works, and playing retro and modern video games on my Steam Deck! </b>
+<p align="center">
+<a href="https://www.youtube.com/@10MinuteSteamDeckGamer/"> <img src="https://github.com/ryanrudolfoba/SteamDeck-Clover-dualboot/blob/main/10minute.png"/> </a>
+</p>
+
 
 ## Disclaimer
 1. Do this at your own risk!
