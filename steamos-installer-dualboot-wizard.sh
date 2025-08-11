@@ -207,12 +207,12 @@ imageroot()
 finalize_part()
 {
   estat "Finalizing install part $1"
-  cmd steamos-chroot --disk "$DISK" --partset "$1" -- mkdir /efi/SteamOS
-  cmd steamos-chroot --disk "$DISK" --partset "$1" -- mkdir -p /esp/SteamOS/conf
-  cmd steamos-chroot --disk "$DISK" --partset "$1" -- steamos-partsets /efi/SteamOS/partsets
-  cmd steamos-chroot --disk "$DISK" --partset "$1" -- steamos-bootconf create --image "$1" --conf-dir /esp/SteamOS/conf --efi-dir /efi --set title "$1"
-  cmd steamos-chroot --disk "$DISK" --partset "$1" -- grub-mkimage
-  cmd steamos-chroot --disk "$DISK" --partset "$1" -- update-grub
+  cmd steamos-chroot --no-overlay --disk "$DISK" --partset "$1" -- mkdir /efi/SteamOS
+  cmd steamos-chroot --no-overlay --disk "$DISK" --partset "$1" -- mkdir -p /esp/SteamOS/conf
+  cmd steamos-chroot --no-overlay --disk "$DISK" --partset "$1" -- steamos-partsets /efi/SteamOS/partsets
+  cmd steamos-chroot --no-overlay --disk "$DISK" --partset "$1" -- steamos-bootconf create --image "$1" --conf-dir /esp/SteamOS/conf --efi-dir /efi --set title "$1"
+  cmd steamos-chroot --no-overlay --disk "$DISK" --partset "$1" -- grub-mkimage
+  cmd steamos-chroot --no-overlay --disk "$DISK" --partset "$1" -- update-grub
 }
 
 ##
