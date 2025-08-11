@@ -302,7 +302,7 @@ repair_steps()
     finalize_part A
     finalize_part B
     estat "Finalizing EFI system partition"
-    cmd steamos-chroot --disk "$DISK" --partset A -- steamcl-install --flags restricted --force-extra-removable
+    cmd steamos-chroot --no-overlay --disk "$DISK" --partset A -- steamcl-install --flags restricted --force-extra-removable
   fi
 }
 
@@ -310,12 +310,12 @@ repair_steps()
 #
 chroot_primary()
 {
-  partset=$( steamos-chroot --disk "$DISK" --partset "A" -- steamos-bootconf selected-image )
+  partset=$( steamos-chroot --no-overlay --disk "$DISK" --partset "A" -- steamos-bootconf selected-image )
 
   estat "Dropping into a chroot on the $partset partition set."
   estat "You can make any needed changes here, and exit when done."
 
-  cmd steamos-chroot --disk "$DISK" --partset "$partset" 
+  cmd steamos-chroot --no-overlay --disk "$DISK" --partset "$partset" 
 }
 
 # return sanitize state (and echo the current percentage complete)
