@@ -16,22 +16,18 @@ echo https://github.com/ryanrudolfoba/SteamOS-installer-dualboot-wizard
 sleep 1
 
 ###### Main menu. Ask user for the preferred SteamOS /home partition size
-InternalSSD=$(lsblk | grep nvme | head -n1 | tr -s " " | cut -d " " -f 4 | cut -d "." -f 1)
-
-if [ $InternalSSD -eq 1 ]
-then
-	InternalSSD=1900
-	echo Internal SSD is 2TiB
-else
-	echo Internal SSD is $InternalSSD\GiB
-fi
+# Get the internal SSD size in GiB. Query raw bytes (lsblk -b) so the result is
+# correct for any drive size - the previous human-readable parsing broke on
+# drives >= 2TiB (a 4TiB SSD printed as "3" and blocked every option).
+InternalSSD=$(lsblk -b -d -n -o NAME,SIZE | awk '/nvme/ {printf "%.0f", $2/1073741824; exit}')
+echo Internal SSD is ${InternalSSD}GiB
 
 Choice=$(zenity --width 1280 --height 400 --list --radiolist --multiple --title "SteamOS Installer with Dual Boot Wizard - https://github.com/ryanrudolfoba/SteamOS-installer-dualboot-wizard"\
 	--column "Select One" \
 	--column "SteamOS /home Partition" \
 	--column="Comments"\
 	FALSE 16GiB "Allocate 16GiB for SteamOS. I use this for testing, BIOS updates etc etc..."\
-	FALSE 32GiB "Allocate 32GiB for SteamOS. 50% for STeamOS and 50% for Windows on a 64GiB Steam Deck."\
+	FALSE 32GiB "Allocate 32GiB for SteamOS. 50% for SteamOS and 50% for Windows on a 64GiB Steam Deck."\
 	FALSE 128GiB "Allocate 128GiB for SteamOS. 50% for SteamOS and 50% for Windows on a 256GiB Steam Deck."\
 	FALSE 256GiB "Allocate 256GiB for SteamOS. 50% for SteamOS and 50% for Windows on a 512GiB Steam Deck."\
 	FALSE 512GiB "Allocate 512GiB for SteamOS. 50% for SteamOS and 50% for Windows on a custom 1TiB Steam Deck."\
@@ -45,7 +41,7 @@ if [ "$Choice" == "CUSTOM" ]
 then
   echo $Choice
   echo OK lets do custom partitioning!
-  CustomPartition=$(zenity --entry --title "Custom Partitioning" --text "How much space to allocate for SteamOS /home parition? (in GiB)")
+  CustomPartition=$(zenity --entry --title "Custom Partitioning" --text "How much space to allocate for SteamOS /home partition? (in GiB)")
   PartitionSize=$(echo $CustomPartition | tr -d [:upper:] | tr -d [:lower:])
   echo $InternalSSD
   echo $PartitionSize
