@@ -203,12 +203,12 @@ imageroot()
 finalize_part()
 {
   estat "Finalizing install part $1"
-  cmd steamos-chroot --disk "$DISK" --partset "$1" -- mkdir /efi/SteamOS
-  cmd steamos-chroot --disk "$DISK" --partset "$1" -- mkdir -p /esp/SteamOS/conf
-  cmd steamos-chroot --disk "$DISK" --partset "$1" -- steamos-partsets /efi/SteamOS/partsets
-  cmd steamos-chroot --disk "$DISK" --partset "$1" -- steamos-bootconf create --image "$1" --conf-dir /esp/SteamOS/conf --efi-dir /efi --set title "$1"
-  cmd steamos-chroot --disk "$DISK" --partset "$1" -- grub-mkimage
-  cmd steamos-chroot --disk "$DISK" --partset "$1" -- update-grub
+  cmd steamos-chroot --no-overlay --disk "$DISK" --partset "$1" -- mkdir /efi/SteamOS
+  cmd steamos-chroot --no-overlay --disk "$DISK" --partset "$1" -- mkdir -p /esp/SteamOS/conf
+  cmd steamos-chroot --no-overlay --disk "$DISK" --partset "$1" -- steamos-partsets /efi/SteamOS/partsets
+  cmd steamos-chroot --no-overlay --disk "$DISK" --partset "$1" -- steamos-bootconf create --image "$1" --conf-dir /esp/SteamOS/conf --efi-dir /efi --set title "$1"
+  cmd steamos-chroot --no-overlay --disk "$DISK" --partset "$1" -- grub-mkimage
+  cmd steamos-chroot --no-overlay --disk "$DISK" --partset "$1" -- update-grub
 }
 
 ##
@@ -298,7 +298,7 @@ repair_steps()
     finalize_part A
     finalize_part B
     estat "Finalizing EFI system partition"
-    cmd steamos-chroot --disk "$DISK" --partset A -- steamcl-install --flags restricted --force-extra-removable
+    cmd steamos-chroot --no-overlay --disk "$DISK" --partset A -- steamcl-install --flags restricted --force-extra-removable
   fi
 }
 
@@ -306,12 +306,12 @@ repair_steps()
 #
 chroot_primary()
 {
-  partset=$( steamos-chroot --disk "$DISK" --partset "A" -- steamos-bootconf selected-image )
+  partset=$( steamos-chroot --no-overlay --disk "$DISK" --partset "A" -- steamos-bootconf selected-image )
 
   estat "Dropping into a chroot on the $partset partition set."
   estat "You can make any needed changes here, and exit when done."
 
-  cmd steamos-chroot --disk "$DISK" --partset "$partset" 
+  cmd steamos-chroot --no-overlay --disk "$DISK" --partset "$partset" 
 }
 
 # return sanitize state (and echo the current percentage complete)
